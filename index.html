@@ -70,18 +70,20 @@
     .video-section { flex: 1; min-height: 0; gap: 5px; }
     .video-panel { flex-shrink: 0; }
     .video-wrap { aspect-ratio: 16/9; }
-    .video-footer { padding: 6px 10px; }
-    #vidTitle { font-size: 11px; }
+    .video-footer { padding: 4px 8px; }
+    #vidTitle { font-size: 10px; }
 
     /* stats row compact */
-    .stats-row { padding: 7px 10px; }
-    .sval { font-size: 18px !important; }
-    .sdelta { font-size: 14px !important; padding: 3px 9px !important; margin-top: 3px !important; }
-    #sparkWrap { margin-top: 5px; padding-top: 5px; }
-    .spark-canvas-wrap { height: 38px !important; }
-    #sparkCanvas { height: 38px !important; }
+    .stats-row { padding: 5px 8px; }
+    .sval { font-size: 15px !important; }
+    .sdelta { font-size: 11px !important; padding: 2px 7px !important; margin-top: 2px !important; }
+    #sparkWrap { margin-top: 4px; padding-top: 4px; }
+    .spark-canvas-wrap { height: 28px !important; }
+    #sparkCanvas { height: 28px !important; }
     #xLabels { display: none; }
-    #trendBadge { font-size: 9px; }
+    #trendBadge { font-size: 8px; padding: 1px 5px; }
+    .spark-title { font-size: 8px; }
+    .stat-block:first-child { padding: 7px 8px !important; }
 
     /* sidebar: 2-col grid */
     .sidebar {
@@ -89,19 +91,21 @@
       grid-template-columns: 1fr 1fr;
       gap: 6px; flex-shrink: 0;
     }
-    .sidebar .side-panel { padding: 8px 10px; }
-    .side-val { font-size: 16px !important; }
-    .side-label { font-size: 9px !important; margin-bottom: 3px !important; }
+    .sidebar .side-panel { padding: 6px 8px; }
+    .side-val { font-size: 14px !important; }
+    .side-label { font-size: 8px !important; margin-bottom: 2px !important; }
 
     /* hide desktop refresh, show inline one */
     .sidebar .refresh-block { display: none !important; }
     /* social panel full width */
-    .sidebar .social-panel { grid-column: span 2; padding: 8px 10px; }
-    .social-title { font-size: 9px; margin-bottom: 5px; }
-    .social-button { padding: 6px 8px; font-size: 10px; }
+    .sidebar .social-panel { grid-column: span 2; padding: 5px 8px; }
+    .social-title { font-size: 8px; margin-bottom: 3px; }
+    .social-button { padding: 5px 7px; font-size: 9px; }
 
     /* inline refresh visible */
     #inlineRefresh { display: flex !important; }
+    #viewsRow { align-items: center; }
+    #viewsRow { align-items: center; }
 
     footer { display: none; }
   }
@@ -155,12 +159,18 @@
   #xLabels { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 8px; color: var(--text-soft); margin-top: 4px; overflow: hidden; }
   #xLabels span { flex: 1; text-align: center; white-space: nowrap; overflow: hidden; }
 
+  /* views row — default stacked, mobile side by side */
+  #viewsRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  #viewsLeft { display: flex; flex-direction: column; }
+
   /* inline refresh — hidden desktop, flex mobile */
   #inlineRefresh {
     display: none;
-    align-items: center; gap: 12px;
-    margin-top: 7px; padding-top: 7px;
-    border-top: 1px solid rgba(56,168,232,0.2);
+    align-items: center; gap: 8px;
   }
   #inlineRefresh .ilabel { font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text-mid); margin-bottom: 2px; }
   #inlineRefresh .itime { font-family: var(--mono); font-size: 9px; color: var(--text-soft); }
@@ -222,8 +232,33 @@
     <div class="panel stats-row">
       <div class="stat-block">
         <div class="slabel">Views</div>
-        <div class="sval" id="viewCount">—</div>
-        <div class="sdelta" id="viewDelta"></div>
+        <!-- views row: number + inline refresh side by side on mobile -->
+        <div id="viewsRow">
+          <div id="viewsLeft">
+            <div class="sval" id="viewCount">—</div>
+            <div class="sdelta" id="viewDelta"></div>
+          </div>
+          <!-- inline refresh: only visible on mobile -->
+          <div id="inlineRefresh">
+            <div style="position:relative;width:56px;height:56px;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+              <svg style="position:absolute;inset:0;transform:rotate(-90deg);" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+                <circle fill="none" stroke="rgba(56,168,232,0.15)" stroke-width="5" cx="36" cy="36" r="30"/>
+                <circle fill="none" stroke="#38a8e8" stroke-width="5" stroke-linecap="round"
+                  stroke-dasharray="188.5" stroke-dashoffset="188.5"
+                  cx="36" cy="36" r="30" id="ringArc2"
+                  style="transition:stroke-dashoffset 0.5s linear;"/>
+              </svg>
+              <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;">
+                <span id="countdownNum2" style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent-dark);letter-spacing:-1px;line-height:1;">30s</span>
+                <span style="font-family:var(--mono);font-size:7px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--text-soft);">next</span>
+              </div>
+            </div>
+            <div>
+              <div class="ilabel">Refresh</div>
+              <div class="itime" id="lastUpdate2">—</div>
+            </div>
+          </div>
+        </div>
 
         <div id="sparkWrap">
           <div class="spark-header">
@@ -234,27 +269,6 @@
             <canvas id="sparkCanvas" role="img" aria-label="View count trend over the last 12 hours"></canvas>
           </div>
           <div id="xLabels"></div>
-        </div>
-
-        <!-- inline refresh: only visible on mobile -->
-        <div id="inlineRefresh">
-          <div style="position:relative;width:64px;height:64px;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
-            <svg style="position:absolute;inset:0;transform:rotate(-90deg);" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
-              <circle fill="none" stroke="rgba(56,168,232,0.15)" stroke-width="5" cx="36" cy="36" r="30"/>
-              <circle fill="none" stroke="#38a8e8" stroke-width="5" stroke-linecap="round"
-                stroke-dasharray="188.5" stroke-dashoffset="188.5"
-                cx="36" cy="36" r="30" id="ringArc2"
-                style="transition:stroke-dashoffset 0.5s linear;"/>
-            </svg>
-            <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;">
-              <span id="countdownNum2" style="font-family:var(--mono);font-size:15px;font-weight:700;color:var(--accent-dark);letter-spacing:-1px;line-height:1;">30s</span>
-              <span style="font-family:var(--mono);font-size:7px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--text-soft);">next</span>
-            </div>
-          </div>
-          <div>
-            <div class="ilabel">Refresh</div>
-            <div class="itime" id="lastUpdate2">—</div>
-          </div>
         </div>
 
       </div>
