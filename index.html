@@ -382,10 +382,18 @@ tickClock();
 setInterval(tickClock, 1000);
 
 function pushHistory(views) {
-  viewHistory.push({ t: new Date(), v: views });
-  const cutoff = new Date(Date.now() - 12 * 3600 * 1000);
+  const now = new Date();
+  // Bucket into 30-min slots: only add a new point if last point is >30min ago
+  const BUCKET = 60 * 60 * 1000; // 60 minutes in ms
+  const last = viewHistory[viewHistory.length - 1];
+  if (!last || (now.getTime() - last.t.getTime()) >= BUCKET) {
+    viewHistory.push({ t: now, v: views });
+  } else {
+    // Update the latest bucket with newest value
+    viewHistory[viewHistory.length - 1].v = views;
+  }
+  const cutoff = new Date(Date.now() - 11 * BUCKET); // keep 11 points = 11h window
   viewHistory = viewHistory.filter(p => p.t >= cutoff);
-  if (viewHistory.length > 144) viewHistory = viewHistory.slice(-144);
   saveHistory();
   renderSpark();
 }
@@ -440,7 +448,7 @@ function renderSpark() {
 
   const el = document.getElementById('xLabels');
   if (el && viewHistory.length >= 2) {
-    const count = Math.min(10, viewHistory.length);
+    const count = Math.min(11, viewHistory.length);
     const step  = (viewHistory.length - 1) / (count - 1);
     const idxs  = Array.from({ length: count }, (_, i) => Math.round(i * step));
     el.innerHTML = idxs.map(i => `<span>${fmtT(viewHistory[i].t)}</span>`).join('');
