@@ -52,63 +52,55 @@
 
   /* ═══════════════ MOBILE ═══════════════ */
   @media (max-width: 700px) {
-    html, body { height: 100%; overflow: hidden; }
+    html, body { height: 100vh; overflow: hidden; }
+
     .page {
       height: 100vh;
       display: flex; flex-direction: column;
-      padding: 8px 10px; gap: 6px;
+      padding: 6px 8px; gap: 5px;
     }
-    /* header compact */
-    header { flex-wrap: nowrap; gap: 6px; }
-    .h-center { gap: 6px; }
-    #clock { font-size: 13px !important; padding: 3px 7px !important; }
 
-    .credit-name { font-size: 11px !important; }
-    .h-label { font-size: 11px !important; }
+    /* header: single line, compact */
+    header { height: 32px; flex-wrap: nowrap; gap: 6px; overflow: hidden; }
+    .h-label { font-size: 10px !important; letter-spacing: 1px; }
+    .live-chip { padding: 3px 6px; }
+    .live-chip span { font-size: 8px; }
+    #clock { font-size: 12px !important; padding: 2px 6px !important; }
+    .h-center { gap: 5px; }
+    .h-center .credit-by, .h-center .credit-name { display: none; }
 
-    /* video fills available space */
-    .video-section { flex: 1; min-height: 0; gap: 5px; }
-    .video-panel { flex-shrink: 0; }
-    .video-wrap { aspect-ratio: 16/9; }
+    /* video: fixed 16:9 based on screen width */
+    .video-section { flex: 0 0 auto; gap: 4px; }
+    .video-panel { flex: 0 0 auto; }
+    .video-wrap { aspect-ratio: 16/9; width: 100%; }
     .video-footer { padding: 4px 8px; }
     #vidTitle { font-size: 10px; }
 
-    /* stats row compact */
-    .stats-row { padding: 5px 8px; }
+    /* stats panel */
+    .stats-row { flex: 0 0 auto; padding: 6px 8px; }
+    .stat-block:first-child { padding: 6px 8px !important; }
+    .slabel { font-size: 8px !important; margin-bottom: 2px !important; }
     .sval { font-size: 20px !important; }
     .sdelta { font-size: 11px !important; padding: 2px 7px !important; margin-top: 2px !important; }
     #sparkWrap { margin-top: 4px; padding-top: 4px; }
-    .spark-canvas-wrap { height: 40px !important; }
-    #sparkCanvas { height: 40px !important; }
-    #xLabels { display: flex; font-size: 7px; margin-top: 2px; }
+    .spark-canvas-wrap { height: 38px !important; }
+    #sparkCanvas { height: 38px !important; }
+    .spark-title { font-size: 7px; }
     #trendBadge { font-size: 8px; padding: 1px 5px; }
-    .spark-title { font-size: 8px; }
-    .stat-block:first-child { padding: 7px 8px !important; }
-    /* kill the huge empty gap */
-    .video-section { flex: 0 0 auto !important; }
-    .sidebar { flex: 1 0 auto !important; }
-
-    /* sidebar: 2-col grid */
-    .sidebar {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px; flex-shrink: 0;
-    }
-    .sidebar .side-panel { padding: 6px 8px; }
-    .side-val { font-size: 14px !important; }
-    .side-label { font-size: 8px !important; margin-bottom: 2px !important; }
-
-    /* hide desktop refresh, show inline one */
-    .sidebar .refresh-block { display: none !important; }
-    /* social panel full width */
-    .sidebar .social-panel { grid-column: span 2; padding: 5px 8px; }
-    .social-title { font-size: 8px; margin-bottom: 3px; }
-    .social-button { padding: 5px 7px; font-size: 9px; }
+    #xLabels { font-size: 7px; margin-top: 2px; }
 
     /* inline refresh visible */
     #inlineRefresh { display: flex !important; }
-    #viewsRow { align-items: center; }
-    #viewsRow { align-items: center; }
+
+    /* sidebar: 2-col, auto height, no stretch */
+    .sidebar { flex: 0 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+    .sidebar .side-panel { padding: 6px 8px; }
+    .side-label { font-size: 8px !important; margin-bottom: 2px !important; }
+    .side-val { font-size: 15px !important; }
+    .sidebar .refresh-block { display: none !important; }
+    .sidebar .social-panel { grid-column: span 2; padding: 5px 8px; }
+    .social-title { font-size: 8px !important; margin-bottom: 3px !important; }
+    .social-button { padding: 5px 8px; font-size: 9px; }
 
     footer { display: none; }
   }
@@ -203,11 +195,6 @@
   .bar-fill  { display: none; }
 
   .credit-api { font-family: var(--mono); font-size: 9px; color: var(--text-soft); letter-spacing: 0.5px; }
-  #mobileCredit { display: none; }
-  @media (max-width: 700px) {
-    #mobileCredit { display: block; }
-    .h-center .credit-by, .h-center .credit-name { display: none; }
-  }
 </style>
 </head>
 <body>
