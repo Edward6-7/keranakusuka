@@ -200,6 +200,11 @@
   .bar-fill  { display: none; }
 
   .credit-api { font-family: var(--mono); font-size: 9px; color: var(--text-soft); letter-spacing: 0.5px; }
+  #mobileCredit { display: none; }
+  @media (max-width: 700px) {
+    #mobileCredit { display: block; }
+    .h-center .credit-by, .h-center .credit-name { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -312,6 +317,9 @@
           </span>
           Instagram
         </a>
+      </div>
+      <div id="mobileCredit" style="font-family:var(--mono);font-size:9px;color:var(--text-soft);text-align:center;margin-top:4px;letter-spacing:0.8px;">
+        Created by <span style="color:var(--accent-dark);font-weight:700;">Edykh</span>
       </div>
     </div>
   </div>
