@@ -26,7 +26,6 @@
     color: var(--text);
   }
 
-  /* subtle grid bg */
   body::before {
     content: '';
     position: fixed; inset: 0; pointer-events: none; z-index: 0;
@@ -38,12 +37,12 @@
 
   .page {
     position: relative; z-index: 1;
-    min-height: 100vh;
+    height: 100vh;
     max-width: 1260px;
     margin: 0 auto;
     display: grid;
-    grid-template-rows: 56px auto 44px;
-    grid-template-columns: 1fr 220px;
+    grid-template-rows: 56px 1fr 44px;
+    grid-template-columns: 1fr 250px;
     grid-template-areas:
       "header header"
       "video sidebar"
@@ -52,18 +51,11 @@
     padding: 16px 20px;
   }
 
-  /* ── header ── */
   header {
     grid-area: header;
     display: flex; align-items: center; justify-content: flex-start;
   }
-  .h-left {
-    display: flex; align-items: center; gap: 12px;
-  }
-  .h-center {
-    display: flex; align-items: center; gap: 10px;
-    margin: 0 auto;
-  }
+  .h-left { display: flex; align-items: center; gap: 12px; }
   .brand-logo {
     width: 24px; height: 24px;
     display: inline-flex; align-items: center; justify-content: center;
@@ -78,15 +70,13 @@
   .h-label {
     font-family: var(--mono);
     font-size: 13px; font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
+    letter-spacing: 1.5px; text-transform: uppercase;
     color: var(--text-mid);
   }
   .live-chip {
     display: flex; align-items: center; gap: 6px;
     border: 1px solid rgba(220,50,50,0.25);
-    border-radius: 5px;
-    padding: 4px 9px;
+    border-radius: 5px; padding: 4px 9px;
     background: rgba(220,50,50,0.06);
   }
   .live-dot {
@@ -110,11 +100,9 @@
   }
   .h-center span { white-space: nowrap; }
   #clock {
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 18px; font-weight: 700;
     color: var(--accent-dark);
-    padding: 4px 10px;
-    border-radius: 999px;
+    padding: 4px 10px; border-radius: 999px;
     background: rgba(56,168,232,0.12);
   }
   .credit-by {
@@ -129,7 +117,6 @@
     color: var(--accent-dark);
   }
 
-  /* ── video section ── */
   .video-section {
     grid-area: video;
     display: flex; flex-direction: column; gap: 8px;
@@ -144,15 +131,17 @@
   }
   .video-panel {
     flex: 1; min-height: 0;
-    max-height: 485px;
-    overflow: hidden;
     display: flex; flex-direction: column;
+    overflow: hidden;
   }
   .video-wrap {
-    aspect-ratio: 16 / 9;
     position: relative; background: #000;
     border-radius: 11px 11px 0 0;
     overflow: hidden;
+    width: 100%;
+    /* 16:9 ratio — but capped so it never overflows the flex parent */
+    aspect-ratio: 16 / 9;
+    max-height: calc(100% - 40px); /* leave room for video-footer */
   }
   .video-wrap iframe {
     position: absolute; inset: 0;
@@ -172,39 +161,36 @@
   }
   .err-msg { font-family: var(--mono); font-size: 10px; color: #b02020; }
 
-  /* stats row */
+  /* ── Stats row — views + sparkline only, auto height ── */
   .stats-row {
-    padding: 11px 13px;
+    padding: 10px 14px;
     display: flex; align-items: stretch; gap: 11px;
     flex-shrink: 0;
   }
   .stat-block { flex: 1; }
   .stat-block + .stat-block {
     border-left: 1px solid var(--border);
-    padding-left: 13px;
-    margin-left: 13px;
+    padding-left: 13px; margin-left: 13px;
   }
   .stat-block:first-child {
     background: rgba(56,168,232,0.08);
-    border-radius: 11px;
-    padding: 13px;
+    border-radius: 11px; padding: 10px;
   }
-  .stat-block:first-child .slabel {
-    color: var(--text);
-  }
+  .stat-block:first-child .slabel { color: var(--text); }
   .slabel {
     font-family: var(--mono);
-    font-size: 10px; font-weight: 600;
+    font-size: 9px; font-weight: 600;
     letter-spacing: 1.1px; text-transform: uppercase;
-    color: var(--text-mid);
-    margin-bottom: 4px;
+    color: var(--text-mid); margin-bottom: 3px;
   }
+
   .sval {
     font-family: var(--mono);
-    font-size: 22px; font-weight: 800;
+    font-size: 24px; font-weight: 800;
     color: var(--text);
-    letter-spacing: -0.5px;
+    letter-spacing: -1px;
     transition: color 0.3s;
+    line-height: 1.1;
   }
   .sval.bump {
     color: #1a8a3a;
@@ -212,22 +198,20 @@
   }
   .sdelta {
     font-family: var(--mono);
-    font-size: 16px; color: #1f8b33;
-    margin-top: 8px;
-    font-weight: 900;
-    letter-spacing: 0.08em;
-    padding: 6px 11px;
-    border-radius: 999px;
-    background: rgba(42,127,51,0.18);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: inset 0 0 0 1px rgba(42,127,51,0.16);
+    font-size: 20px; font-weight: 900;
+    margin-top: 6px;
+    letter-spacing: -0.5px;
+    padding: 5px 13px; border-radius: 999px;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--text-soft);
+    background: rgba(56,168,232,0.08);
+    box-shadow: inset 0 0 0 1px rgba(56,168,232,0.15);
   }
   .sdelta.up {
     color: #1a8a3a;
+    background: rgba(42,127,51,0.18);
+    box-shadow: inset 0 0 0 1px rgba(42,127,51,0.22);
     animation: pulse 0.55s ease;
-    background: rgba(42,127,51,0.22);
   }
   @keyframes pulse {
     0% { transform: scale(1); }
@@ -235,41 +219,112 @@
     60% { transform: scale(0.98); }
     100% { transform: scale(1); }
   }
-  .refresh-block {
-    display: flex; flex-direction: column;
-    justify-content: space-between;
-    gap: 10px;
-    background: rgba(56,168,232,0.1);
-    border-radius: 12px;
-    padding: 12px;
+
+  /* ── Sparkline ── */
+  #sparkWrap {
+    margin-top: 7px; padding-top: 7px;
+    border-top: 1px solid rgba(56,168,232,0.2);
   }
-  .refresh-block .side-label {
-    margin-bottom: 0;
+  .spark-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 4px;
+  }
+  .spark-title {
     font-family: var(--mono);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1.1px;
-    color: var(--text);
-  }
-  #countdownNum {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--accent-dark);
-  }
-  .refresh-bar-wrap { margin-top: 8px; }
-  .side-sub {
-    font-family: var(--mono);
-    font-size: 10px;
+    font-size: 9px; letter-spacing: 1px; text-transform: uppercase;
     color: var(--text-mid);
   }
+  #trendBadge {
+    font-family: var(--mono);
+    font-size: 10px; padding: 2px 7px; border-radius: 99px;
+    background: rgba(42,127,51,0.15); color: #1a8a3a;
+  }
+  .spark-canvas-wrap { position: relative; width: 100%; height: 55px; }
+  #sparkCanvas { display: block; }
+  #xLabels {
+    display: flex; justify-content: space-between;
+    flex-wrap: nowrap;
+    font-family: var(--mono);
+    font-size: 8px; color: var(--text-soft); margin-top: 4px;
+    overflow: hidden;
+  }
+  #xLabels span { flex: 1; text-align: center; white-space: nowrap; overflow: hidden; }
 
-  /* ── sidebar ── */
+  /* ── Refresh block — sidebar card ── */
+  .refresh-block {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 6px;
+    padding: 14px 10px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    flex-shrink: 0;
+  }
+  .ring-wrap {
+    position: relative;
+    width: 72px; height: 72px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ring-svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+  .ring-track {
+    fill: none;
+    stroke: rgba(56,168,232,0.15);
+    stroke-width: 5;
+  }
+  .ring-arc {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 5;
+    stroke-linecap: round;
+    stroke-dasharray: 188.5;
+    stroke-dashoffset: 188.5;
+    transition: stroke-dashoffset 0.5s linear;
+  }
+  .ring-inner {
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 0;
+  }
+  #countdownNum {
+    font-family: var(--mono);
+    font-size: 18px; font-weight: 700;
+    color: var(--accent-dark);
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+  .ring-sub {
+    font-family: var(--mono);
+    font-size: 8px; font-weight: 600;
+    letter-spacing: 0.8px; text-transform: uppercase;
+    color: var(--text-soft);
+  }
+  .refresh-label-row {
+    font-family: var(--mono);
+    font-size: 9px; font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: var(--text-mid);
+  }
+  .side-sub {
+    font-family: var(--mono);
+    font-size: 9px; color: var(--text-soft);
+    text-align: center;
+  }
+  /* keep bar-track/fill in DOM but hidden — not used */
+  .bar-track { display: none; }
+  .bar-fill  { display: none; }
+
+  /* ── Sidebar ── */
   .sidebar {
     grid-area: sidebar;
     display: flex; flex-direction: column; gap: 8px;
-    min-height: 0;
+    min-height: 0; overflow: hidden;
   }
-  .side-panel { padding: 8px 10px; }
+  .side-panel { padding: 12px 14px; flex-shrink: 0; }
+  .social-panel { flex-shrink: 0; padding: 10px 14px; }
   .side-label {
     font-family: var(--mono);
     font-size: 11px; font-weight: 500;
@@ -282,84 +337,30 @@
     font-size: 22px; font-weight: 600;
     color: var(--text); letter-spacing: -0.4px;
   }
-  .side-sub {
-    font-family: var(--mono);
-    font-size: 9px; color: var(--text-soft);
-    margin-top: 3px;
-  }
-  .social-panel {
-    display: flex; flex-direction: column; gap: 10px;
-  }
+  .social-panel { display: flex; flex-direction: column; gap: 10px; }
   .social-title {
     font-family: var(--mono);
     font-size: 10px; font-weight: 600;
     letter-spacing: 1.4px; text-transform: uppercase;
-    color: var(--text-mid);
-    margin-bottom: 8px;
+    color: var(--text-mid); margin-bottom: 6px;
   }
-  .social-buttons {
-    display: flex; gap: 8px;
-  }
+  .social-buttons { display: flex; gap: 8px; }
   .social-button {
     flex: 1;
     display: flex; align-items: center; justify-content: center;
-    gap: 8px;
-    padding: 10px 12px;
-    border-radius: 12px;
+    gap: 6px; padding: 7px 10px; border-radius: 8px;
     font-family: var(--mono);
-    font-size: 12px; font-weight: 600;
-    color: #ffffff;
-    text-transform: uppercase;
-    text-decoration: none;
+    font-size: 11px; font-weight: 600;
+    color: #ffffff; text-transform: uppercase; text-decoration: none;
   }
   .social-button.ig { background: #e4405f; }
-  .social-icon {
-    width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center;
-  }
+  .social-icon { width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; }
 
-  /* refresh bar */
-  .bar-track {
-    height: 5px; background: rgba(56,168,232,0.22);
-    border-radius: 100px; overflow: hidden; margin-top: 8px;
-  }
-  .bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent-dark));
-    border-radius: 100px; width: 0%;
-    transition: width 0.5s linear;
-  }
-
-  /* ── footer / credit ── */
   footer {
     grid-area: footer;
     display: flex; align-items: center; justify-content: center; gap: 10px;
   }
-  .h-center {
-    display: flex; align-items: center; gap: 10px;
-    font-family: var(--mono);
-    font-size: 14px; color: var(--text);
-  }
-  .credit-by {
-    font-family: var(--mono);
-    font-size: 13px; font-weight: 700;
-    letter-spacing: 1.3px; text-transform: uppercase;
-    color: var(--text);
-  }
-  .credit-name {
-    font-family: var(--mono);
-    font-size: 18px; font-weight: 900;
-    color: var(--accent-dark);
-    letter-spacing: 1px;
-  }
-  .credit-dot {
-    width: 3px; height: 3px; border-radius: 50%;
-    background: var(--text-soft);
-  }
-  .credit-api {
-    font-family: var(--mono);
-    font-size: 9px; color: var(--text-soft);
-    letter-spacing: 0.5px;
-  }
+  .credit-api { font-family: var(--mono); font-size: 9px; color: var(--text-soft); letter-spacing: 0.5px; }
 </style>
 </head>
 <body>
@@ -393,15 +394,18 @@
       <div class="stat-block">
         <div class="slabel">Views</div>
         <div class="sval" id="viewCount">—</div>
-        <div class="sdelta" id="viewDelta">fetching…</div>
-      </div>
-      <div class="stat-block refresh-block">
-        <div class="side-label">
-          <span>Refresh</span>
-          <span id="countdownNum">30s</span>
+        <div class="sdelta" id="viewDelta"></div>
+
+        <div id="sparkWrap">
+          <div class="spark-header">
+            <span class="spark-title">12h trend</span>
+            <span id="trendBadge">loading…</span>
+          </div>
+          <div class="spark-canvas-wrap">
+            <canvas id="sparkCanvas" role="img" aria-label="View count trend over the last 12 hours"></canvas>
+          </div>
+          <div id="xLabels"></div>
         </div>
-        <div class="refresh-bar-wrap"><div class="bar-track"><div class="bar-fill" id="refreshBar"></div></div></div>
-        <div class="side-sub">Updated: <span id="lastUpdate">—</span></div>
       </div>
     </div>
   </div>
@@ -414,6 +418,21 @@
     <div class="panel side-panel">
       <div class="side-label">Comments</div>
       <div class="side-val" id="sideComments">—</div>
+    </div>
+    <div class="panel refresh-block">
+      <div class="refresh-label-row">Refresh</div>
+      <div class="ring-wrap">
+        <svg class="ring-svg" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+          <circle class="ring-track" cx="36" cy="36" r="30"/>
+          <circle class="ring-arc"   cx="36" cy="36" r="30" id="ringArc"/>
+        </svg>
+        <div class="ring-inner">
+          <span id="countdownNum">30s</span>
+          <span class="ring-sub">next</span>
+        </div>
+      </div>
+      <div class="side-sub" id="lastUpdate">—</div>
+      <div class="bar-track"><div class="bar-fill" id="refreshBar"></div></div>
     </div>
     <div class="panel side-panel social-panel">
       <div class="social-title">Follow me for cookies 🍪</div>
@@ -437,65 +456,192 @@
   </footer>
 
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-const API_KEY = 'AIzaSyA-he9jY9Gay1VBe0nNfv2W6ED6JNRI4Go';
+const API_KEY  = 'AIzaSyA-he9jY9Gay1VBe0nNfv2W6ED6JNRI4Go';
 const VIDEO_ID = 'EDliuALaUm0';
 const INTERVAL = 30;
-let prevViews = null, countdown = INTERVAL, timerInterval;
+const LS_KEY   = 'vt_history_' + VIDEO_ID;
 
-function fmt(n) { return n ? parseInt(n).toLocaleString('en-US') : '—'; }
+let prevViews = null, countdown = INTERVAL, timerInterval;
+let viewHistory = [], sparkChart = null;
+
+function loadHistory() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return;
+    const cutoff = Date.now() - 12 * 3600 * 1000;
+    viewHistory = JSON.parse(raw)
+      .filter(p => p.t >= cutoff)
+      .map(p => ({ t: new Date(p.t), v: p.v }));
+  } catch(e) { viewHistory = []; }
+}
+
+function saveHistory() {
+  try {
+    const cutoff = Date.now() - 12 * 3600 * 1000;
+    localStorage.setItem(LS_KEY, JSON.stringify(
+      viewHistory.filter(p => p.t.getTime() >= cutoff).map(p => ({ t: p.t.getTime(), v: p.v }))
+    ));
+  } catch(e) {}
+}
+
+function fmt(n)    { return n ? parseInt(n).toLocaleString('en-US') : '—'; }
+function fmtNum(n) {
+  if (n >= 1000000) return (n / 1000000).toFixed(2) + 'M';
+  if (n >= 1000)    return (n / 1000).toFixed(1) + 'K';
+  return n.toLocaleString('en-US');
+}
+function fmtT(d) {
+  return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+}
 
 function tickClock() {
   document.getElementById('clock').textContent =
-    new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+    new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }
 tickClock();
 setInterval(tickClock, 1000);
 
+function pushHistory(views) {
+  viewHistory.push({ t: new Date(), v: views });
+  const cutoff = new Date(Date.now() - 12 * 3600 * 1000);
+  viewHistory = viewHistory.filter(p => p.t >= cutoff);
+  if (viewHistory.length > 144) viewHistory = viewHistory.slice(-144);
+  saveHistory();
+  renderSpark();
+}
+
+function renderSpark() {
+  const canvas = document.getElementById('sparkCanvas');
+  if (!canvas) return;
+  const wrap = canvas.parentElement;
+  const W = wrap.clientWidth || 240;
+  canvas.width = W; canvas.height = 55;
+  canvas.style.width = W + 'px'; canvas.style.height = '55px';
+
+  const labels = viewHistory.map(p => fmtT(p.t));
+  const vals   = viewHistory.map(p => p.v);
+
+  if (sparkChart) { sparkChart.destroy(); sparkChart = null; }
+
+  sparkChart = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        data: vals,
+        borderColor: '#38a8e8', borderWidth: 2,
+        pointRadius: viewHistory.length <= 8 ? 3 : 0,
+        pointHoverRadius: 5,
+        pointBackgroundColor: '#38a8e8',
+        fill: true, backgroundColor: 'rgba(56,168,232,0.13)', tension: 0.38
+      }]
+    },
+    options: {
+      responsive: false, animation: { duration: 350 },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => fmtNum(ctx.parsed.y) + ' views' } }
+      },
+      scales: {
+        x: { display: false },
+        y: {
+          display: true, position: 'right',
+          grid: { color: 'rgba(56,168,232,0.12)' },
+          ticks: {
+            color: '#7aaabb',
+            font: { size: 9, family: "'IBM Plex Mono', monospace" },
+            maxTicksLimit: 3, callback: v => fmtNum(v)
+          },
+          border: { display: false }
+        }
+      }
+    }
+  });
+
+  const el = document.getElementById('xLabels');
+  if (el && viewHistory.length >= 2) {
+    const count = Math.min(10, viewHistory.length);
+    const step  = (viewHistory.length - 1) / (count - 1);
+    const idxs  = Array.from({ length: count }, (_, i) => Math.round(i * step));
+    el.innerHTML = idxs.map(i => `<span>${fmtT(viewHistory[i].t)}</span>`).join('');
+  }
+
+  const badge = document.getElementById('trendBadge');
+  if (badge) {
+    if (viewHistory.length >= 2) {
+      const delta = vals[vals.length - 1] - vals[0];
+      if (delta > 0) {
+        badge.textContent = '+' + fmtNum(delta);
+        badge.style.background = 'rgba(42,127,51,0.15)'; badge.style.color = '#1a8a3a';
+      } else if (delta < 0) {
+        badge.textContent = fmtNum(delta);
+        badge.style.background = 'rgba(180,30,30,0.10)'; badge.style.color = '#b02020';
+      } else {
+        badge.textContent = 'no change';
+        badge.style.background = 'rgba(56,168,232,0.12)'; badge.style.color = '#1a6fa0';
+      }
+    } else {
+      badge.textContent = 'collecting…';
+      badge.style.background = 'rgba(56,168,232,0.08)'; badge.style.color = '#7aaabb';
+    }
+  }
+}
+
 async function fetchStats() {
   try {
-    const res = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics,snippet&id=${VIDEO_ID}&key=${API_KEY}`);
+    const res  = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics,snippet&id=${VIDEO_ID}&key=${API_KEY}`);
     const data = await res.json();
     if (data.error) { document.getElementById('errMsg').textContent = data.error.message; return; }
     const item = data.items?.[0];
-    if (!item) { document.getElementById('errMsg').textContent = 'Not found'; return; }
-    const s = item.statistics;
+    if (!item)   { document.getElementById('errMsg').textContent = 'Not found'; return; }
+
+    const s     = item.statistics;
     const views = parseInt(s.viewCount);
 
     const el = document.getElementById('viewCount');
     el.textContent = fmt(views);
-    el.classList.add('bump');
+    el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump');
     setTimeout(() => el.classList.remove('bump'), 500);
 
     const d = document.getElementById('viewDelta');
     if (prevViews !== null && views > prevViews) {
       d.textContent = '+' + fmt(views - prevViews);
       d.classList.add('up');
-    } else { d.textContent = 'up to date'; d.classList.remove('up'); }
+    }
+    // if no change, keep showing whatever was there before
     prevViews = views;
 
-    document.getElementById('vidTitle').textContent = item.snippet.title;
-    document.getElementById('sideLikes').textContent = fmt(s.likeCount);
+    document.getElementById('vidTitle').textContent    = item.snippet.title;
+    document.getElementById('sideLikes').textContent   = fmt(s.likeCount);
     document.getElementById('sideComments').textContent = fmt(s.commentCount);
-    document.getElementById('lastUpdate').textContent =
-      new Date().toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
-    document.getElementById('errMsg').textContent = '';
+    document.getElementById('lastUpdate').textContent  =
+      new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+    pushHistory(views);
   } catch(e) { document.getElementById('errMsg').textContent = 'Connection error'; }
 }
 
 function startCountdown() {
   countdown = INTERVAL; clearInterval(timerInterval);
+  const arc = document.getElementById('ringArc');
+  const circumference = 188.5;
   timerInterval = setInterval(() => {
     countdown--;
     if (countdown <= 0) countdown = INTERVAL;
-    document.getElementById('refreshBar').style.width = ((INTERVAL - countdown) / INTERVAL * 100) + '%';
+    const progress = (INTERVAL - countdown) / INTERVAL;
+    if (arc) arc.style.strokeDashoffset = circumference * (1 - progress);
+    document.getElementById('refreshBar').style.width = (progress * 100) + '%';
     document.getElementById('countdownNum').textContent = countdown + 's';
   }, 1000);
 }
 
-function refresh() { fetchStats(); startCountdown(); }
-refresh();
-setInterval(refresh, INTERVAL * 1000);
+loadHistory();
+if (viewHistory.length > 0) renderSpark();
+fetchStats(); startCountdown();
+setInterval(() => { fetchStats(); startCountdown(); }, INTERVAL * 1000);
 </script>
 </body>
 </html>
