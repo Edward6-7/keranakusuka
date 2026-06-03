@@ -60,8 +60,8 @@
       padding: 6px 8px; gap: 5px;
     }
 
-    /* header: single line, compact */
-    header { height: 32px; flex-wrap: nowrap; gap: 6px; overflow: hidden; }
+    /* ── Header: one line, 30px ── */
+    header { height: 30px; flex-wrap: nowrap; gap: 6px; overflow: hidden; flex-shrink: 0; }
     .h-label { font-size: 10px !important; letter-spacing: 1px; }
     .live-chip { padding: 3px 6px; }
     .live-chip span { font-size: 8px; }
@@ -69,38 +69,38 @@
     .h-center { gap: 5px; }
     .h-center .credit-by, .h-center .credit-name { display: none; }
 
-    /* video: fixed 16:9 based on screen width */
+    /* ── Video section ── */
     .video-section { flex: 0 0 auto; gap: 4px; }
     .video-panel { flex: 0 0 auto; }
     .video-wrap { aspect-ratio: 16/9; width: 100%; }
-    .video-footer { padding: 4px 8px; }
-    #vidTitle { font-size: 10px; }
+    .video-footer { padding: 5px 10px; flex-shrink: 0; }
+    #vidTitle { font-size: 11px; }
 
-    /* stats panel */
-    .stats-row { flex: 0 0 auto; padding: 6px 8px; }
-    .stat-block:first-child { padding: 6px 8px !important; }
+    /* ── Stats panel ── */
+    .stats-row { flex: 0 0 auto; padding: 7px 10px; }
+    .stat-block:first-child { padding: 7px 10px !important; }
     .slabel { font-size: 8px !important; margin-bottom: 2px !important; }
-    .sval { font-size: 20px !important; }
+    .sval { font-size: 22px !important; }
     .sdelta { font-size: 11px !important; padding: 2px 7px !important; margin-top: 2px !important; }
-    #sparkWrap { margin-top: 4px; padding-top: 4px; }
-    .spark-canvas-wrap { height: 38px !important; }
-    #sparkCanvas { height: 38px !important; }
+    #sparkWrap { margin-top: 5px; padding-top: 5px; }
+    .spark-canvas-wrap { height: 42px !important; }
+    #sparkCanvas { height: 42px !important; }
     .spark-title { font-size: 7px; }
     #trendBadge { font-size: 8px; padding: 1px 5px; }
     #xLabels { font-size: 7px; margin-top: 2px; }
 
-    /* inline refresh visible */
+    /* ── Inline refresh visible ── */
     #inlineRefresh { display: flex !important; }
 
-    /* sidebar: 2-col, auto height, no stretch */
+    /* ── Sidebar: 2-col grid ── */
     .sidebar { flex: 0 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
-    .sidebar .side-panel { padding: 6px 8px; }
-    .side-label { font-size: 8px !important; margin-bottom: 2px !important; }
-    .side-val { font-size: 15px !important; }
+    .sidebar .side-panel { padding: 7px 10px; }
+    .side-label { font-size: 9px !important; margin-bottom: 2px !important; }
+    .side-val { font-size: 17px !important; }
     .sidebar .refresh-block { display: none !important; }
-    .sidebar .social-panel { grid-column: span 2; padding: 5px 8px; }
-    .social-title { font-size: 8px !important; margin-bottom: 3px !important; }
-    .social-button { padding: 5px 8px; font-size: 9px; }
+    .sidebar .social-panel { grid-column: span 2; padding: 6px 10px; }
+    .social-title { font-size: 9px !important; margin-bottom: 4px !important; }
+    .social-button { padding: 6px 8px; font-size: 10px; }
 
     footer { display: none; }
   }
