@@ -19,11 +19,12 @@
     --sans: 'IBM Plex Sans', sans-serif;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { height: 100%; overflow: hidden; }
+  html { height: 100%; }
   body {
     font-family: var(--sans);
     background: linear-gradient(160deg, #dff2fd 0%, #c5e8f8 50%, #a8d8f0 100%);
     color: var(--text);
+    min-height: 100vh;
   }
 
   body::before {
@@ -35,9 +36,9 @@
     background-size: 40px 40px;
   }
 
+  /* ── DESKTOP layout ── */
   .page {
     position: relative; z-index: 1;
-    height: 100vh;
     max-width: 1260px;
     margin: 0 auto;
     display: grid;
@@ -49,11 +50,30 @@
       "footer footer";
     gap: 10px;
     padding: 16px 20px;
+    min-height: 100vh;
+  }
+
+  /* ── MOBILE layout ── */
+  @media (max-width: 700px) {
+    body { overflow-y: auto; }
+    .page {
+      grid-template-rows: auto auto auto auto;
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "header"
+        "video"
+        "sidebar"
+        "footer";
+      padding: 12px;
+      gap: 10px;
+      min-height: unset;
+    }
   }
 
   header {
     grid-area: header;
     display: flex; align-items: center; justify-content: flex-start;
+    flex-wrap: wrap; gap: 8px;
   }
   .h-left { display: flex; align-items: center; gap: 12px; }
   .brand-logo {
@@ -66,6 +86,7 @@
     font-size: 11px; font-weight: 700;
     letter-spacing: 0.8px;
     text-transform: uppercase;
+    flex-shrink: 0;
   }
   .h-label {
     font-family: var(--mono);
@@ -105,6 +126,12 @@
     padding: 4px 10px; border-radius: 999px;
     background: rgba(56,168,232,0.12);
   }
+
+  @media (max-width: 700px) {
+    .h-center { margin: 0; font-size: 12px; }
+    #clock { font-size: 15px; }
+  }
+
   .credit-by {
     font-family: var(--mono);
     font-size: 12px; font-weight: 500;
@@ -117,6 +144,7 @@
     color: var(--accent-dark);
   }
 
+  /* ── Video section ── */
   .video-section {
     grid-area: video;
     display: flex; flex-direction: column; gap: 8px;
@@ -139,9 +167,7 @@
     border-radius: 11px 11px 0 0;
     overflow: hidden;
     width: 100%;
-    /* 16:9 ratio — but capped so it never overflows the flex parent */
     aspect-ratio: 16 / 9;
-    max-height: calc(100% - 40px); /* leave room for video-footer */
   }
   .video-wrap iframe {
     position: absolute; inset: 0;
@@ -161,7 +187,7 @@
   }
   .err-msg { font-family: var(--mono); font-size: 10px; color: #b02020; }
 
-  /* ── Stats row — views + sparkline only, auto height ── */
+  /* ── Stats row ── */
   .stats-row {
     padding: 10px 14px;
     display: flex; align-items: stretch; gap: 11px;
@@ -183,7 +209,6 @@
     letter-spacing: 1.1px; text-transform: uppercase;
     color: var(--text-mid); margin-bottom: 3px;
   }
-
   .sval {
     font-family: var(--mono);
     font-size: 24px; font-weight: 800;
@@ -250,79 +275,26 @@
   }
   #xLabels span { flex: 1; text-align: center; white-space: nowrap; overflow: hidden; }
 
-  /* ── Refresh block — sidebar card ── */
-  .refresh-block {
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 6px;
-    padding: 14px 10px;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    flex-shrink: 0;
-  }
-  .ring-wrap {
-    position: relative;
-    width: 72px; height: 72px;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .ring-svg { position: absolute; inset: 0; transform: rotate(-90deg); }
-  .ring-track {
-    fill: none;
-    stroke: rgba(56,168,232,0.15);
-    stroke-width: 5;
-  }
-  .ring-arc {
-    fill: none;
-    stroke: var(--accent);
-    stroke-width: 5;
-    stroke-linecap: round;
-    stroke-dasharray: 188.5;
-    stroke-dashoffset: 188.5;
-    transition: stroke-dashoffset 0.5s linear;
-  }
-  .ring-inner {
-    position: relative; z-index: 1;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 0;
-  }
-  #countdownNum {
-    font-family: var(--mono);
-    font-size: 18px; font-weight: 700;
-    color: var(--accent-dark);
-    letter-spacing: -1px;
-    line-height: 1;
-  }
-  .ring-sub {
-    font-family: var(--mono);
-    font-size: 8px; font-weight: 600;
-    letter-spacing: 0.8px; text-transform: uppercase;
-    color: var(--text-soft);
-  }
-  .refresh-label-row {
-    font-family: var(--mono);
-    font-size: 9px; font-weight: 600;
-    letter-spacing: 1px; text-transform: uppercase;
-    color: var(--text-mid);
-  }
-  .side-sub {
-    font-family: var(--mono);
-    font-size: 9px; color: var(--text-soft);
-    text-align: center;
-  }
-  /* keep bar-track/fill in DOM but hidden — not used */
-  .bar-track { display: none; }
-  .bar-fill  { display: none; }
-
   /* ── Sidebar ── */
   .sidebar {
     grid-area: sidebar;
     display: flex; flex-direction: column; gap: 8px;
-    min-height: 0; overflow: hidden;
+    min-height: 0;
   }
+
+  @media (max-width: 700px) {
+    .sidebar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+    }
+    /* likes + comments side by side, refresh + social full width */
+    .sidebar .side-panel:nth-child(1),
+    .sidebar .side-panel:nth-child(2) { grid-column: span 1; }
+    .sidebar .refresh-block { grid-column: span 2; flex-direction: row; justify-content: flex-start; gap: 14px; }
+    .sidebar .social-panel { grid-column: span 2; }
+  }
+
   .side-panel { padding: 12px 14px; flex-shrink: 0; }
   .social-panel { flex-shrink: 0; padding: 10px 14px; }
   .side-label {
@@ -356,9 +328,67 @@
   .social-button.ig { background: #e4405f; }
   .social-icon { width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; }
 
+  /* ── Refresh ring ── */
+  .refresh-block {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 6px;
+    padding: 14px 10px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    flex-shrink: 0;
+  }
+  .ring-wrap {
+    position: relative;
+    width: 72px; height: 72px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ring-svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+  .ring-track { fill: none; stroke: rgba(56,168,232,0.15); stroke-width: 5; }
+  .ring-arc {
+    fill: none; stroke: var(--accent); stroke-width: 5;
+    stroke-linecap: round; stroke-dasharray: 188.5; stroke-dashoffset: 188.5;
+    transition: stroke-dashoffset 0.5s linear;
+  }
+  .ring-inner {
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 0;
+  }
+  #countdownNum {
+    font-family: var(--mono);
+    font-size: 18px; font-weight: 700;
+    color: var(--accent-dark);
+    letter-spacing: -1px; line-height: 1;
+  }
+  .ring-sub {
+    font-family: var(--mono);
+    font-size: 8px; font-weight: 600;
+    letter-spacing: 0.8px; text-transform: uppercase;
+    color: var(--text-soft);
+  }
+  .refresh-label-row {
+    font-family: var(--mono);
+    font-size: 9px; font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: var(--text-mid);
+  }
+  .side-sub {
+    font-family: var(--mono);
+    font-size: 9px; color: var(--text-soft);
+    text-align: center;
+  }
+  .bar-track { display: none; }
+  .bar-fill  { display: none; }
+
   footer {
     grid-area: footer;
     display: flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 8px 0;
   }
   .credit-api { font-family: var(--mono); font-size: 9px; color: var(--text-soft); letter-spacing: 0.5px; }
 </style>
@@ -467,9 +497,23 @@ const LS_KEY   = 'vt_history_' + VIDEO_ID;
 let prevViews = null, countdown = INTERVAL, timerInterval;
 let viewHistory = [], sparkChart = null;
 
+// ── Safe storage helpers (localStorage with sessionStorage fallback) ──
+function storageSave(key, value) {
+  try { localStorage.setItem(key, value); return; } catch(e) {}
+  try { sessionStorage.setItem(key, value); } catch(e) {}
+}
+function storageLoad(key) {
+  try {
+    const v = localStorage.getItem(key);
+    if (v !== null) return v;
+  } catch(e) {}
+  try { return sessionStorage.getItem(key); } catch(e) {}
+  return null;
+}
+
 function loadHistory() {
   try {
-    const raw = localStorage.getItem(LS_KEY);
+    const raw = storageLoad(LS_KEY);
     if (!raw) return;
     const cutoff = Date.now() - 12 * 3600 * 1000;
     viewHistory = JSON.parse(raw)
@@ -481,7 +525,7 @@ function loadHistory() {
 function saveHistory() {
   try {
     const cutoff = Date.now() - 12 * 3600 * 1000;
-    localStorage.setItem(LS_KEY, JSON.stringify(
+    storageSave(LS_KEY, JSON.stringify(
       viewHistory.filter(p => p.t.getTime() >= cutoff).map(p => ({ t: p.t.getTime(), v: p.v }))
     ));
   } catch(e) {}
@@ -611,13 +655,12 @@ async function fetchStats() {
       d.textContent = '+' + fmt(views - prevViews);
       d.classList.add('up');
     }
-    // if no change, keep showing whatever was there before
     prevViews = views;
 
-    document.getElementById('vidTitle').textContent    = item.snippet.title;
-    document.getElementById('sideLikes').textContent   = fmt(s.likeCount);
+    document.getElementById('vidTitle').textContent     = item.snippet.title;
+    document.getElementById('sideLikes').textContent    = fmt(s.likeCount);
     document.getElementById('sideComments').textContent = fmt(s.commentCount);
-    document.getElementById('lastUpdate').textContent  =
+    document.getElementById('lastUpdate').textContent   =
       new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
     pushHistory(views);
@@ -633,14 +676,14 @@ function startCountdown() {
     if (countdown <= 0) countdown = INTERVAL;
     const progress = (INTERVAL - countdown) / INTERVAL;
     if (arc) arc.style.strokeDashoffset = circumference * (1 - progress);
-    document.getElementById('refreshBar').style.width = (progress * 100) + '%';
     document.getElementById('countdownNum').textContent = countdown + 's';
   }, 1000);
 }
 
 loadHistory();
 if (viewHistory.length > 0) renderSpark();
-fetchStats(); startCountdown();
+fetchStats();
+startCountdown();
 setInterval(() => { fetchStats(); startCountdown(); }, INTERVAL * 1000);
 </script>
 </body>
