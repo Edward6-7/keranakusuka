@@ -286,13 +286,31 @@
     .sidebar {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto auto;
     }
-    /* likes + comments side by side, refresh + social full width */
     .sidebar .side-panel:nth-child(1),
     .sidebar .side-panel:nth-child(2) { grid-column: span 1; }
-    .sidebar .refresh-block { grid-column: span 2; flex-direction: row; justify-content: flex-start; gap: 14px; }
+    /* hide refresh block from sidebar on mobile — moved into stats-row */
+    .sidebar .refresh-block { display: none; }
+    /* IG takes full width */
     .sidebar .social-panel { grid-column: span 2; }
+    /* show inline refresh inside stats panel */
+    #inlineRefresh { display: flex; }
+  }
+
+  /* inline refresh ring — hidden on desktop, shown on mobile */
+  #inlineRefresh {
+    display: none;
+    align-items: center; gap: 14px;
+    margin-top: 10px; padding-top: 10px;
+    border-top: 1px solid rgba(56,168,232,0.2);
+  }
+  #inlineRefresh .ilabel {
+    font-family: var(--mono); font-size: 9px; font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase; color: var(--text-mid);
+    margin-bottom: 2px;
+  }
+  #inlineRefresh .itime {
+    font-family: var(--mono); font-size: 9px; color: var(--text-soft);
   }
 
   .side-panel { padding: 12px 14px; flex-shrink: 0; }
@@ -436,6 +454,25 @@
           </div>
           <div id="xLabels"></div>
         </div>
+
+        <!-- inline refresh: only visible on mobile -->
+        <div id="inlineRefresh">
+          <div class="ring-wrap" style="width:52px;height:52px;flex-shrink:0;">
+            <svg class="ring-svg" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+              <circle class="ring-track" cx="36" cy="36" r="30"/>
+              <circle class="ring-arc" cx="36" cy="36" r="30" id="ringArc2"/>
+            </svg>
+            <div class="ring-inner">
+              <span id="countdownNum2" style="font-family:var(--mono);font-size:14px;font-weight:700;color:var(--accent-dark);letter-spacing:-1px;line-height:1;">30s</span>
+              <span class="ring-sub">next</span>
+            </div>
+          </div>
+          <div>
+            <div class="ilabel">Refresh</div>
+            <div class="itime" id="lastUpdate2">—</div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -660,8 +697,10 @@ async function fetchStats() {
     document.getElementById('vidTitle').textContent     = item.snippet.title;
     document.getElementById('sideLikes').textContent    = fmt(s.likeCount);
     document.getElementById('sideComments').textContent = fmt(s.commentCount);
-    document.getElementById('lastUpdate').textContent   =
-      new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const timeStr = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    document.getElementById('lastUpdate').textContent  = timeStr;
+    const lu2 = document.getElementById('lastUpdate2');
+    if (lu2) lu2.textContent = timeStr;
 
     pushHistory(views);
   } catch(e) { document.getElementById('errMsg').textContent = 'Connection error'; }
@@ -669,14 +708,18 @@ async function fetchStats() {
 
 function startCountdown() {
   countdown = INTERVAL; clearInterval(timerInterval);
-  const arc = document.getElementById('ringArc');
+  const arc  = document.getElementById('ringArc');
+  const arc2 = document.getElementById('ringArc2');
   const circumference = 188.5;
   timerInterval = setInterval(() => {
     countdown--;
     if (countdown <= 0) countdown = INTERVAL;
     const progress = (INTERVAL - countdown) / INTERVAL;
-    if (arc) arc.style.strokeDashoffset = circumference * (1 - progress);
+    if (arc)  arc.style.strokeDashoffset  = circumference * (1 - progress);
+    if (arc2) arc2.style.strokeDashoffset = circumference * (1 - progress);
     document.getElementById('countdownNum').textContent = countdown + 's';
+    const cn2 = document.getElementById('countdownNum2');
+    if (cn2) cn2.textContent = countdown + 's';
   }, 1000);
 }
 
